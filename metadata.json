@@ -1,0 +1,6 @@
+{
+  "name": "Vi - Data Lakehouse & Cloud Solutions",
+  "description": "Landing page corporativa de Vi para soluciones end-to-end de Data Warehouse, Data Lakes, Lakehouses y analítica avanzada en AWS y Azure.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,80 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-primary: #5B4FE5;
+  --color-primary-hover: #4A3FD2;
+  --color-dark-bg: #0A0A0A;
+  --color-dark-card: #2A2A2A;
+}
+
+body {
+  line-height: 1.75;
+}
+
+p {
+  line-height: 1.75 !important;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  line-height: 1.25 !important;
+}
+
+/* Custom Paper-Fold / Origami Cut Corner Utility */
+.paper-cut {
+  clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);
+}
+
+.paper-cut-lg {
+  clip-path: polygon(0 0, calc(100% - 28px) 0, 100% 28px, 100% 100%, 0 100%);
+}
+
+.paper-cut-fold {
+  position: relative;
+}
+
+.paper-cut-fold::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  background-color: rgba(91, 79, 229, 0.08);
+  border-bottom: 1px solid rgba(91, 79, 229, 0.3);
+  border-left: 1px solid rgba(91, 79, 229, 0.3);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Dotted divider */
+.dotted-line {
+  background-image: linear-gradient(to right, #5B4FE5 33%, rgba(255,255,255,0) 0%);
+  background-position: bottom;
+  background-size: 6px 1px;
+  background-repeat: repeat-x;
+}
+
+/* Halftone / Dot-matrix background pattern */
+.bg-dot-matrix {
+  background-image: radial-gradient(#5B4FE5 1.5px, transparent 1.5px);
+  background-size: 12px 12px;
+}
+
+.bg-dot-matrix-sm {
+  background-image: radial-gradient(#5B4FE5 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+.bg-dot-matrix-dark {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
+  background-size: 14px 14px;
+}
+
+/* Smooth transitions */
+.transition-editorial {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
