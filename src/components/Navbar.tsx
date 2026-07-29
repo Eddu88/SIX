@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ChevronDown, BookOpen, Layers, Calculator } from 'lucide-react';
+import { translations, Language } from '../data/translations';
 
 interface NavbarProps {
   currentPath?: string;
@@ -7,6 +8,8 @@ interface NavbarProps {
   onOpenContact: () => void;
   onOpenRoiCalculator: () => void;
   onOpenResources: () => void;
+  lang: Language;
+  onToggleLanguage: (lang: Language) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -15,6 +18,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenContact,
   onOpenRoiCalculator,
   onOpenResources,
+  lang,
+  onToggleLanguage,
 }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -28,6 +33,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const t = translations[lang].navbar;
+
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md ${
@@ -38,29 +45,29 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between">
           
           {/* LOGO "Six" Isotype */}
-          <a
-            href="/"
-            onClick={(e) => {
-              e.preventDefault();
-              onNavigate?.('/');
-            }}
-            className="flex items-center gap-3 group"
-          >
-            <div className="w-9 h-9 bg-[#0A0A0A] rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl tracking-tight shadow-sm transition-transform group-hover:scale-105 border border-neutral-800">
+          <div className="flex items-center gap-3">
+            <a
+              href="/"
+              onClick={(e) => {
+                e.preventDefault();
+                onNavigate?.('/');
+              }}
+              className="w-9 h-9 bg-[#0A0A0A] hover:bg-[#5B4FE5] text-[#FFFFFF] rounded-lg flex items-center justify-center font-serif font-bold text-xl transition-colors cursor-pointer"
+            >
               Six
-            </div>
+            </a>
             <div className="flex flex-col">
               <span className="font-sans font-bold text-sm tracking-widest text-[#111111] uppercase leading-none">
                 SIX DATA
               </span>
-              <span className="text-[10px] text-[#6B7280] font-mono tracking-tight leading-tight mt-0.5">
-                DATA & CRM SOLUTIONS
+              <span className="text-[9px] text-[#6B7280] font-mono mt-0.5 tracking-wider">
+                DATA & CRM
               </span>
             </div>
-          </a>
+          </div>
 
           {/* DESKTOP NAVIGATION MENU */}
-          <nav className="hidden md:flex items-center space-x-0 border-x border-neutral-200">
+          <nav className="hidden md:flex items-center">
             
             <a
               href="/soluciones-datos"
@@ -68,11 +75,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 e.preventDefault();
                 onNavigate?.('/soluciones-datos');
               }}
-              className={`px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-colors border-r border-neutral-200/80 ${
-                currentPath === '/soluciones-datos' ? 'text-[#5B4FE5]' : 'text-[#111111] hover:text-[#5B4FE5]'
+              className={`px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-colors border-r border-neutral-200/80 hover:text-[#5B4FE5] ${
+                currentPath === '/soluciones-datos' ? 'text-[#5B4FE5]' : 'text-[#111111]'
               }`}
             >
-              Soluciones de Datos
+              {t.soluciones}
             </a>
 
             <a
@@ -81,71 +88,52 @@ export const Navbar: React.FC<NavbarProps> = ({
                 e.preventDefault();
                 onNavigate?.('/crm');
               }}
-              className={`px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-colors border-r border-neutral-200/80 ${
-                currentPath === '/crm' ? 'text-[#5B4FE5]' : 'text-[#111111] hover:text-[#5B4FE5]'
+              className={`px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-colors border-r border-neutral-200/80 hover:text-[#5B4FE5] ${
+                currentPath === '/crm' ? 'text-[#5B4FE5]' : 'text-[#111111]'
               }`}
             >
-              CRM
+              {t.crm}
             </a>
 
-            {/* RECURSOS DROPDOWN */}
-            <div
-              className="relative border-r border-neutral-200/80"
-              onMouseEnter={() => setResourcesDropdownOpen(true)}
-              onMouseLeave={() => setResourcesDropdownOpen(false)}
-            >
+            {/* DROPDOWN RESOURCES & BLUEPRINTS */}
+            <div className="relative border-r border-neutral-200/80">
               <button
-                onClick={onOpenResources}
+                onClick={() => setResourcesDropdownOpen(!resourcesDropdownOpen)}
                 className="px-5 py-2 text-xs font-semibold tracking-wider uppercase text-[#111111] hover:text-[#5B4FE5] transition-colors flex items-center gap-1 cursor-pointer"
               >
-                Recursos
-                <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${resourcesDropdownOpen ? 'rotate-180 text-[#5B4FE5]' : 'text-neutral-400'}`} />
+                <span>{t.recursos}</span>
+                <ChevronDown className="w-3.5 h-3.5 text-[#5B4FE5]" />
               </button>
 
-              {/* DROPDOWN MENU */}
               {resourcesDropdownOpen && (
-                <div className="absolute top-full left-0 w-72 bg-white border border-neutral-900/15 shadow-xl py-3 px-2 rounded-b-md transition-all animate-in fade-in duration-150">
-                  <div className="px-3 py-1.5 text-[10px] font-mono text-[#6B7280] uppercase tracking-wider border-b border-neutral-100 mb-1">
-                    Documentación & Blueprints
-                  </div>
-                  
+                <div className="absolute top-full left-0 mt-2.5 w-64 bg-white border border-neutral-950/15 rounded-lg shadow-xl p-3 space-y-2.5 animate-in fade-in duration-150 z-50">
                   <button
                     onClick={() => {
                       setResourcesDropdownOpen(false);
                       onOpenResources();
                     }}
-                    className="w-full text-left px-3 py-2 text-xs font-medium text-[#111111] hover:bg-neutral-50 hover:text-[#5B4FE5] rounded flex items-center gap-2.5 transition-colors"
+                    className="w-full flex items-start gap-3 p-2 hover:bg-neutral-50 rounded text-left cursor-pointer transition-colors"
                   >
-                    <BookOpen className="w-4 h-4 text-[#5B4FE5]" />
+                    <BookOpen className="w-4 h-4 text-[#5B4FE5] shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-semibold">Blueprints de Arquitectura</div>
-                      <div className="text-[10px] text-[#6B7280]">Diseños de bajo costo en la nube</div>
-                    </div>
-                  </button>
-
-                  <button
-                    onClick={() => {
-                      setResourcesDropdownOpen(false);
-                      onOpenRoiCalculator();
-                    }}
-                    className="w-full text-left px-3 py-2 text-xs font-medium text-[#111111] hover:bg-neutral-50 hover:text-[#5B4FE5] rounded flex items-center gap-2.5 transition-colors mt-0.5"
-                  >
-                    <Calculator className="w-4 h-4 text-[#5B4FE5]" />
-                    <div>
-                      <div className="font-semibold">Calculadora ROI CRM</div>
-                      <div className="text-[10px] text-[#6B7280]">Estimación de ahorro y eficiencia</div>
+                      <div className="font-semibold text-xs text-[#111111]">{t.recursos}</div>
+                      <div className="text-[10px] text-[#6B7280]">{t.recursosSub}</div>
                     </div>
                   </button>
 
                   <a
-                    href="#comparativa"
-                    onClick={() => setResourcesDropdownOpen(false)}
-                    className="w-full text-left px-3 py-2 text-xs font-medium text-[#111111] hover:bg-neutral-50 hover:text-[#5B4FE5] rounded flex items-center gap-2.5 transition-colors mt-0.5"
+                    href="/crm"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setResourcesDropdownOpen(false);
+                      onNavigate?.('/crm');
+                    }}
+                    className="w-full flex items-start gap-3 p-2 hover:bg-neutral-50 rounded text-left cursor-pointer transition-colors"
                   >
-                    <Layers className="w-4 h-4 text-[#5B4FE5]" />
+                    <Layers className="w-4 h-4 text-[#5B4FE5] shrink-0 mt-0.5" />
                     <div>
-                      <div className="font-semibold">Excel vs CRM Table</div>
-                      <div className="text-[10px] text-[#6B7280]">Comparador de productividad</div>
+                      <div className="font-semibold text-xs text-[#111111]">{t.excelVsCrm}</div>
+                      <div className="text-[10px] text-[#6B7280]">{t.excelVsCrmSub}</div>
                     </div>
                   </a>
                 </div>
@@ -158,27 +146,53 @@ export const Navbar: React.FC<NavbarProps> = ({
                 e.preventDefault();
                 onNavigate?.('/nosotros');
               }}
-              className="px-5 py-2 text-xs font-semibold tracking-wider uppercase text-[#111111] hover:text-[#5B4FE5] transition-colors border-r border-neutral-200/80"
+              className={`px-5 py-2 text-xs font-semibold tracking-wider uppercase transition-colors border-r border-neutral-200/80 hover:text-[#5B4FE5] ${
+                currentPath === '/nosotros' ? 'text-[#5B4FE5]' : 'text-[#111111]'
+              }`}
             >
-              Nosotros
+              {t.nosotros}
             </a>
 
             <button
               onClick={onOpenRoiCalculator}
               className="px-5 py-2 text-xs font-semibold tracking-wider uppercase text-[#111111] hover:text-[#5B4FE5] transition-colors flex items-center gap-1 cursor-pointer"
             >
-              Precios & ROI
+              {t.calculadora}
             </button>
           </nav>
 
-          {/* BUTTON ACTIONS */}
-          <div className="hidden sm:flex items-center gap-2.5">
+          {/* BUTTON ACTIONS & LANGUAGE SELECTOR */}
+          <div className="hidden sm:flex items-center gap-3">
             <button
               onClick={onOpenContact}
               className="px-5 py-2 bg-[#0A0A0A] hover:bg-[#5B4FE5] text-white font-sans font-bold text-xs uppercase tracking-wider rounded-md transition-all duration-200 shadow-sm flex items-center gap-1.5 cursor-pointer"
             >
-              CONVERSEMOS
+              {t.conversar}
             </button>
+
+            {/* Language Selector: EN | ES */}
+            <div className="flex items-center bg-neutral-100 rounded-md p-0.5 border border-neutral-200 shadow-xs">
+              <button
+                onClick={() => onToggleLanguage('es')}
+                className={`px-2 py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
+                  lang === 'es'
+                    ? 'bg-[#5B4FE5] text-white shadow-sm'
+                    : 'text-neutral-500 hover:text-[#111111]'
+                }`}
+              >
+                ES
+              </button>
+              <button
+                onClick={() => onToggleLanguage('en')}
+                className={`px-2 py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
+                  lang === 'en'
+                    ? 'bg-[#5B4FE5] text-white shadow-sm'
+                    : 'text-neutral-500 hover:text-[#111111]'
+                }`}
+              >
+                EN
+              </button>
+            </div>
           </div>
 
           {/* MOBILE MENU TOGGLE BUTTON */}
@@ -194,8 +208,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* MOBILE MENU DRAWER */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-white border-b border-neutral-900/15 px-4 pt-4 pb-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
-          <div className="flex flex-col space-y-3 font-sans text-sm uppercase tracking-wider font-semibold text-[#111111] border-b border-neutral-100 pb-4">
+        <div className="md:hidden bg-white border-b border-neutral-900/15 p-5 space-y-4 absolute top-full left-0 right-0 shadow-lg animate-in slide-in-from-top duration-200 z-40">
+          <div className="flex flex-col gap-3 font-sans text-xs font-bold uppercase tracking-wider text-[#111111]">
             <a
               href="/soluciones-datos"
               onClick={(e) => {
@@ -207,7 +221,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentPath === '/soluciones-datos' ? 'text-[#5B4FE5]' : ''
               }`}
             >
-              Soluciones de Datos
+              {t.soluciones}
             </a>
             
             <a
@@ -221,7 +235,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 currentPath === '/crm' ? 'text-[#5B4FE5]' : ''
               }`}
             >
-              CRM
+              {t.crm}
             </a>
 
             <button
@@ -229,9 +243,9 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onOpenResources();
               }}
-              className="text-left hover:text-[#5B4FE5] py-1 flex items-center justify-between"
+              className="text-left hover:text-[#5B4FE5] py-1 flex items-center justify-between cursor-pointer"
             >
-              Recursos & Blueprints
+              {t.recursos}
               <BookOpen className="w-4 h-4 text-[#5B4FE5]" />
             </button>
             <a
@@ -241,32 +255,63 @@ export const Navbar: React.FC<NavbarProps> = ({
                 setMobileMenuOpen(false);
                 onNavigate?.('/nosotros');
               }}
-              className="hover:text-[#5B4FE5] py-1"
+              className="hover:text-[#5B4FE5] py-1 text-left"
             >
-              Nosotros
+              {t.nosotros}
             </a>
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenRoiCalculator();
               }}
-              className="text-left hover:text-[#5B4FE5] py-1 flex items-center justify-between"
+              className="text-left hover:text-[#5B4FE5] py-1 flex items-center justify-between cursor-pointer"
             >
-              Precios & Calculadora ROI
+              {t.calculadora}
               <Calculator className="w-4 h-4 text-[#5B4FE5]" />
             </button>
           </div>
 
-          <div className="pt-2 flex flex-col gap-2">
+          <div className="pt-2 flex flex-col gap-3">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenContact();
               }}
-              className="w-full py-2.5 bg-[#0A0A0A] text-white font-bold text-xs uppercase tracking-wider rounded-md text-center"
+              className="w-full py-2.5 bg-[#0A0A0A] hover:bg-[#5B4FE5] text-white font-bold text-xs uppercase tracking-wider rounded-md text-center cursor-pointer transition-colors"
             >
-              CONVERSEMOS CON UN EXPERTO
+              {t.conversar}
             </button>
+
+            {/* Mobile Language Switcher */}
+            <div className="flex items-center justify-between p-2 bg-neutral-100 rounded-md border border-neutral-200">
+              <span className="text-xs font-sans font-semibold text-[#111111]">
+                {lang === 'en' ? 'Select Language:' : 'Seleccionar Idioma:'}
+              </span>
+              <div className="flex items-center gap-1 bg-white rounded p-0.5 border border-neutral-200/80">
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onToggleLanguage('es');
+                  }}
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
+                    lang === 'es' ? 'bg-[#5B4FE5] text-white' : 'text-neutral-500'
+                  }`}
+                >
+                  ES
+                </button>
+                <button
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    onToggleLanguage('en');
+                  }}
+                  className={`px-2.5 py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
+                    lang === 'en' ? 'bg-[#5B4FE5] text-white' : 'text-neutral-500'
+                  }`}
+                >
+                  EN
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}

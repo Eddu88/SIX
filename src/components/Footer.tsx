@@ -1,11 +1,13 @@
 import React from 'react';
 import { Mail, Phone, Linkedin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { translations, Language } from '../data/translations';
 
 interface FooterProps {
   onNavigate?: (to: string) => void;
   onOpenContact: () => void;
   onOpenResources: () => void;
   onOpenRoiCalculator: () => void;
+  lang: Language;
 }
 
 export const Footer: React.FC<FooterProps> = ({
@@ -13,7 +15,10 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenContact,
   onOpenResources,
   onOpenRoiCalculator,
+  lang,
 }) => {
+  const t = translations[lang].footer;
+
   return (
     <footer className="bg-[#0A0A0A] text-[#FFFFFF] pt-16 pb-12 border-t border-neutral-800 relative overflow-hidden">
       
@@ -49,7 +54,7 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
 
             <p className="font-sans text-xs text-neutral-400 leading-relaxed">
-              Somos una <strong className="text-white">empresa emergente</strong> dedicada a brindar servicios integrales en arquitectura, ingeniería de datos, análisis de dashboards e integración de CRM modernos en la nube.
+              {t.description}
             </p>
 
             <div className="pt-2 space-y-1.5 font-mono text-[10px] text-neutral-400">
@@ -71,7 +76,7 @@ export const Footer: React.FC<FooterProps> = ({
           {/* COLUMN 2: SERVICIOS */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
-              Soluciones & Servicios
+              {t.solucionesTitle}
             </h4>
             <ul className="space-y-2 text-xs font-sans text-neutral-400">
               <li>
@@ -83,7 +88,7 @@ export const Footer: React.FC<FooterProps> = ({
                   }}
                   className="hover:text-[#5B4FE5] transition-colors"
                 >
-                  CRM Moderno & Nube
+                  {t.crmModerno}
                 </a>
               </li>
               <li>
@@ -95,7 +100,7 @@ export const Footer: React.FC<FooterProps> = ({
                   }}
                   className="hover:text-[#5B4FE5] transition-colors"
                 >
-                  Ingeniería de Datos & Pipelines
+                  {t.ingenieriaPipelines}
                 </a>
               </li>
               <li>
@@ -107,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({
                   }}
                   className="hover:text-[#5B4FE5] transition-colors"
                 >
-                  Arquitectura de Datos End-to-End
+                  {t.arquitecturaEnd}
                 </a>
               </li>
               <li>
@@ -119,7 +124,7 @@ export const Footer: React.FC<FooterProps> = ({
                   }}
                   className="hover:text-[#5B4FE5] transition-colors"
                 >
-                  Análisis & Dashboards de Datos
+                  {t.analisisDash}
                 </a>
               </li>
             </ul>
@@ -128,17 +133,17 @@ export const Footer: React.FC<FooterProps> = ({
           {/* COLUMN 3: RECURSOS */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
-              Recursos
+              {t.recursosTitle}
             </h4>
             <ul className="space-y-2 text-xs font-sans text-neutral-400">
               <li>
                 <button onClick={onOpenResources} className="hover:text-[#5B4FE5] transition-colors text-left cursor-pointer">
-                  Blueprints de Arquitectura
+                  {t.blueprints}
                 </button>
               </li>
               <li>
                 <button onClick={onOpenRoiCalculator} className="hover:text-[#5B4FE5] transition-colors text-left cursor-pointer">
-                  Calculadora ROI CRM
+                  {t.calcRoi}
                 </button>
               </li>
               <li>
@@ -150,7 +155,7 @@ export const Footer: React.FC<FooterProps> = ({
                   }}
                   className="hover:text-[#5B4FE5] transition-colors"
                 >
-                  Ecosistema de Tecnologías
+                  {t.ecosistema}
                 </a>
               </li>
               <li>
@@ -162,12 +167,12 @@ export const Footer: React.FC<FooterProps> = ({
                   }}
                   className="hover:text-[#5B4FE5] transition-colors"
                 >
-                  Tabla Excel vs CRM
+                  {t.tablaExcel}
                 </a>
               </li>
               <li>
                 <button onClick={onOpenContact} className="hover:text-[#5B4FE5] transition-colors text-left cursor-pointer">
-                  Evaluación de CRM Gratuita
+                  {t.evalFree}
                 </button>
               </li>
             </ul>
@@ -176,17 +181,17 @@ export const Footer: React.FC<FooterProps> = ({
           {/* COLUMN 4: PRESENCIA REGIONAL */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
-              Presencia Regional
+              {t.presenciaTitle}
             </h4>
             <ul className="space-y-2.5 text-xs font-sans text-neutral-400">
               <li className="flex items-center gap-1.5 justify-between">
                 <span className="flex items-center gap-1.5">
                   <span>🇵🇪</span>
-                  <span className="text-white font-medium">Perú</span>
+                  <span className="text-white font-medium">{lang === 'en' ? 'Peru' : 'Perú'}</span>
                   <span className="text-[10px] text-neutral-400">(Lima)</span>
                 </span>
                 <span className="text-[9px] font-mono text-[#5B4FE5] border border-[#5B4FE5] px-1.5 py-0.2 rounded font-bold">
-                  SEDE PRINCIPAL
+                  {t.sedeSuf}
                 </span>
               </li>
               <li className="flex items-center gap-1.5">
@@ -199,13 +204,13 @@ export const Footer: React.FC<FooterProps> = ({
           {/* COLUMN 5: CONTACTO & SOPORTE */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
-              Contacto & Soporte
+              {t.contactoTitle}
             </h4>
 
             <div className="space-y-3 text-xs font-sans text-neutral-400">
               <div className="space-y-1">
-                <div className="font-semibold text-white uppercase text-[9px] tracking-wider">Horario de Atención</div>
-                <div className="text-[10px] font-mono leading-normal">Disponible las 24 horas, los 7 días de la semana</div>
+                <div className="font-semibold text-white uppercase text-[9px] tracking-wider">{t.horarioLabel}</div>
+                <div className="text-[10px] font-mono leading-normal">{t.horarioVal}</div>
               </div>
 
               <div className="flex items-center gap-2">
@@ -229,7 +234,7 @@ export const Footer: React.FC<FooterProps> = ({
         {/* BOTTOM ROW: COPYRIGHT & SOCIAL ICONS */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-neutral-400">
           <div>
-            © {new Date().getFullYear()} Six Data Solutions S.A.C. Todos los derechos reservados.
+            © {new Date().getFullYear()} Six Data Solutions S.A.C. {t.derechos}
           </div>
 
           {/* SOCIAL MEDIA CIRCULAR BUTTONS */}

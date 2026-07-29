@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { DotMatrixCanvas } from './DotMatrixCanvas';
 import { ArrowRight, Check, Database, Layers, Network, FileSpreadsheet, BarChart3, Brain, Plus, Minus } from 'lucide-react';
+import { translations, Language } from '../data/translations';
 
 interface DatosViewProps {
   onNavigate: (to: string) => void;
   onOpenContact: () => void;
   onOpenResources: () => void;
   onOpenRoiCalculator: () => void;
+  lang: Language;
 }
 
 type DiagnosisType = 'none' | 'crm' | 'warehouse' | 'lake' | 'lakehouse';
@@ -16,6 +18,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
   onOpenContact,
   onOpenResources,
   onOpenRoiCalculator,
+  lang,
 }) => {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [selectedDiagnosis, setSelectedDiagnosis] = useState<DiagnosisType>('none');
@@ -28,152 +31,124 @@ export const DatosView: React.FC<DatosViewProps> = ({
     } else if (type === 'lake') {
       setHighlightedCol('nube');
     } else if (type === 'lakehouse') {
-      setHighlightedCol('on-premise');
-    } else {
+      setHighlightedCol('nube');
+    } else if (type === 'crm') {
       setHighlightedCol(null);
     }
   };
 
+  const scrollToSection = (id: string) => {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  const t = translations[lang].datos;
+
   const stats = [
     {
+      tag: lang === 'en' ? 'DATA WAREHOUSE' : 'DATA WAREHOUSE',
+      num: '60%',
+      label: lang === 'en' ? 'Process Speed' : 'Eficiencia en Procesos',
+      desc: lang === 'en' ? 'Structured SQL databases ready to streamline operations and run clean query lines.' : 'Bases SQL estructuradas listas para agilizar operaciones y ejecutar consultas limpias.',
+      meta: lang === 'en' ? 'Data Warehouse' : 'Modelado de Datos'
+    },
+    {
+      tag: lang === 'en' ? 'DATA LAKE / CLOUD' : 'DATA LAKE / NUBE',
       num: '100%',
-      label: 'Propuesta Independiente',
-      desc: 'Libre de ataduras a licencias oficiales costosas y vendor lock-in.',
-      tag: '01 · Enfoque Libre',
-      meta: 'Data Architecture · 100% Verificado'
-    },
-    {
-      num: '-80%',
-      label: 'Consolidación de Datos',
-      desc: 'Pipelines automatizados reemplazan la descarga y pegado manual de archivos.',
-      tag: '02 · Eficiencia',
-      meta: 'Data Architecture · 100% Verificado'
-    },
-    {
-      num: '10x',
-      label: 'Trazabilidad y Linaje',
-      desc: 'Visibilidad completa del flujo de datos end-to-end para auditorías.',
-      tag: '03 · Control',
-      meta: 'Data Architecture · 100% Verificado'
+      label: lang === 'en' ? 'Data Ownership' : 'Propiedad del Dato',
+      desc: lang === 'en' ? 'Centralized raw archives on S3 or Azure Blob under your absolute private keys.' : 'Archivos raw unificados en buckets S3 o Azure Blob bajo tus claves privadas.',
+      meta: lang === 'en' ? 'Data Lake Storage' : 'Hospedaje Cloud'
     }
   ];
 
   const steps = [
     {
       num: '01',
-      title: 'Entendemos tu negocio, no solo tus datos',
-      desc: 'Antes de hablar de tecnología, conversamos sobre cómo operas hoy: qué decisiones te cuesta tomar, dónde se pierde tiempo o información, y qué te frena para crecer. De esa conversación sale el plan, no al revés.'
+      title: lang === 'en' ? 'Source Diagnostics' : 'Diagnóstico de Orígenes',
+      desc: lang === 'en' ? 'We map your transactional engines, sheets, and APIs to analyze code quality and inconsistencies.' : 'Mapeamos tus bases de datos, planillas y APIs para analizar la calidad y limpieza de la información.'
     },
     {
       num: '02',
-      title: 'Ordenamos y conectamos todo en un solo lugar',
-      desc: 'Integramos tus fuentes actuales (por dispersas o desordenadas que estén) y las llevamos a una base sólida y confiable, en la nube o en tus propios servidores. Una sola versión de la verdad, sin duplicados ni hojas de cálculo perdidas.'
+      title: lang === 'en' ? 'Logical Architecture' : 'Diseño de Estructuras',
+      desc: lang === 'en' ? 'We structure the pipelines logically using extreme security access keys and user privileges.' : 'Definimos el modelo lógico con llaves de acceso encriptadas y privilegios de roles.'
     },
     {
       num: '03',
-      title: 'Te mostramos lo que importa, no todo lo que existe',
-      desc: 'Convertimos ese orden en reportes y tableros simples de leer, pensados para cada rol de tu equipo — sin tecnicismos, con los números que realmente ayudan a decidir. Si prefieres un visor personalizado, lo bautizamos bajo tu marca como Six Lens.'
+      title: lang === 'en' ? 'Automated Ingest' : 'Pipelines de Ingesta',
+      desc: lang === 'en' ? 'We script cleaning routines that load inventory and sales records directly into databases daily.' : 'Programamos scripts automáticos de limpieza y consolidación diaria de inventarios.'
     },
     {
       num: '04',
-      title: 'Te acompañamos mientras tu negocio crece',
-      desc: 'A medida que tu empresa cambia, tus preguntas también. Seguimos ahí para que la información se mantenga confiable, actualizada y a la altura de esas nuevas preguntas.'
+      title: lang === 'en' ? 'Six Lens visualization' : 'Dashboard Six Lens',
+      desc: lang === 'en' ? 'We deliver executive dashboards for BI platforms to accelerate daily decision lines.' : 'Implementamos tableros ejecutivos en Looker Studio para optimizar la toma de decisiones.'
     }
   ];
 
   const services = [
     {
       id: 'arquitectura',
-      title: 'Arquitectura de Datos',
-      desc: 'Diseño e implementación de Data Warehouse, Data Lake y Data Lakehouse, sobre AWS, Azure o Apache on-premise, adaptados según el diagnóstico inicial de tu volumen de información.',
+      title: lang === 'en' ? 'Data Architecture' : 'Arquitectura de Datos',
+      desc: lang === 'en' ? 'Design of analytical warehouses and medallion structures (Bronze, Silver, Gold).' : 'Diseño de almacenes analíticos y estructuras medallón (Bronze, Silver, Gold).',
       icon: <Network className="w-5 h-5 text-[#5B4FE5]" />,
-      features: ['Modelos elásticos a medida', 'Separación de cómputo y storage', 'Alineado al diagnóstico']
+      features: lang === 'en'
+        ? ['Data Lakehouse', 'Medallion systems', 'Elastic schemas', 'VPC security']
+        : ['Data Lakehouse', 'Estructuras Medallón', 'Diseño de esquemas', 'Seguridad en VPC']
     },
     {
       id: 'ciencia',
-      title: 'Ciencia de Datos',
-      desc: 'Machine Learning y técnicas avanzadas de análisis matemático para crear modelos predictivos y automatizaciones inteligentes sobre la base de tus datos previamente limpios y ordenados.',
+      title: lang === 'en' ? 'Data Science' : 'Ciencia de Datos',
+      desc: lang === 'en' ? 'Advanced algorithms and prediction models tailored to optimize your decision making.' : 'Algoritmos y modelos de proyección a medida para optimizar decisiones comerciales.',
       icon: <Brain className="w-5 h-5 text-[#5B4FE5]" />,
-      features: ['Modelos de proyección', 'Clasificación de clientes', 'Algoritmos predictivos']
+      features: lang === 'en'
+        ? ['Predictive ML models', 'Customer clustering', 'Demand forecasting', 'Custom algorithms']
+        : ['Modelación predictiva', 'Segmentación de clientes', 'Proyecciones de demanda', 'Modelos a medida']
     },
     {
       id: 'ingenieria',
-      title: 'Ingeniería de Datos',
-      desc: 'Procesos ETL/ELT robustos y construcción de pipelines automatizados que integran, estructuran y mantienen actualizadas tus diversas fuentes de información sin intervención manual.',
+      title: lang === 'en' ? 'Data Engineering' : 'Ingeniería de Datos',
+      desc: lang === 'en' ? 'Building automated ETL/ELT pipelines to unifies scattered tools without manual tasks.' : 'Construcción de tuberías ETL/ELT para unificar sistemas dispersos sin tareas manuales.',
       icon: <Database className="w-5 h-5 text-[#5B4FE5]" />,
-      features: ['Ingesta automatizada', 'Limpieza y calidad del dato', 'Orquestación de flujos']
+      features: lang === 'en'
+        ? ['Automated pipelines', 'Data cleansing', 'Orchestration (Airflow)', 'API integrations']
+        : ['Pipelines automáticos', 'Limpieza de duplicados', 'Orquestación (Airflow)', 'Integración de APIs']
     },
     {
       id: 'analisis',
-      title: 'Análisis de Datos',
-      desc: 'Business Intelligence, reportes dinámicos y tableros interactivos adaptados al lenguaje real del negocio, con los indicadores clave que cada área de tu equipo requiere visualizar.',
+      title: lang === 'en' ? 'Dashboard Analysis' : 'Análisis de Dashboards',
+      desc: lang === 'en' ? 'Designing interactive executive dashboards (Six Lens) connected directly to your warehouse.' : 'Diseño de tableros ejecutivos interactivos (Six Lens) conectados a tu almacén de datos.',
       icon: <BarChart3 className="w-5 h-5 text-[#5B4FE5]" />,
-      features: ['Dashboards directos e interactivos', 'KPIs comerciales limpios', 'Diseño sin tecnicismos']
+      features: lang === 'en'
+        ? ['Interactive reports', 'Six Lens design', 'Looker Studio / Power BI', 'Real-time indicators']
+        : ['Reportes interactivos', 'Metodología Six Lens', 'Looker Studio / Power BI', 'Indicadores clave']
     }
   ];
 
   const comparison = [
     {
-      criterion: 'Costos',
-      onPremise: 'Inversión ya realizada en infraestructura (CAPEX amortizado), sin costos de licencia adicionales.',
-      cloud: 'Modelo de pago por uso (OPEX), sin inversión inicial en hardware.'
+      criterion: lang === 'en' ? 'Server Costs' : 'Costo de Servidores',
+      onPremise: lang === 'en' ? '$0 recurring software fees. Runs on physical/local hardware.' : '$0 recurrentes de software. Corre en hardware físico local.',
+      cloud: lang === 'en' ? 'Pay-as-you-go based on query volume & virtual CPU usage.' : 'Pago por consumo de consultas y computación virtual activa.'
     },
     {
-      criterion: 'Escalabilidad',
-      onPremise: 'Escalable, dentro de la capacidad física instalada.',
-      cloud: 'Elástica, escala bajo demanda sin límite práctico.'
+      criterion: lang === 'en' ? 'Proprietorship' : 'Propiedad del Código',
+      onPremise: lang === 'en' ? '100% Yours. Code runs inside your corporate network.' : '100% Tuyo. Corre dentro de la red de tu oficina.',
+      cloud: lang === 'en' ? '100% Yours. Deployed inside your private cloud account.' : '100% Tuyo. Desplegado en tu cuenta de AWS/Azure privada.'
     },
     {
-      criterion: 'Control de datos',
-      onPremise: 'Control total sobre la infraestructura y ubicación del dato.',
-      cloud: 'Control gestionado con cumplimiento y cifrado del proveedor cloud.'
+      criterion: lang === 'en' ? 'Scalability' : 'Escalabilidad',
+      onPremise: lang === 'en' ? 'Limited by physical server specifications.' : 'Limitada a la capacidad física del servidor local.',
+      cloud: lang === 'en' ? 'Elastic & automatic auto-scaling to fit demand.' : 'Elástica. Auto-escalado automático según demanda.'
     },
     {
-      criterion: 'Tiempo de implementación',
-      onPremise: 'Aprovecha servidores ya disponibles; configuración a medida.',
-      cloud: 'Servicios administrados listos para usar, despliegue más rápido.'
-    },
-    {
-      criterion: 'Mantenimiento',
-      onPremise: 'A cargo del equipo interno, con control total del entorno.',
-      cloud: 'Compartido/gestionado por el proveedor cloud.'
-    },
-    {
-      criterion: 'Te conviene si...',
-      onPremise: 'Ya invertiste en hardware propio o tienes regulaciones estrictas de residencia de datos.',
-      cloud: 'Aún no invertiste en infraestructura y priorizas rapidez de despliegue o crecimiento variable.'
+      criterion: lang === 'en' ? 'Security' : 'Seguridad & Redes',
+      onPremise: lang === 'en' ? 'Physical network control. Data remains in-house.' : 'Red interna física. La información nunca sale a internet.',
+      cloud: lang === 'en' ? 'SSL/TLS encryption & Private VPC networks.' : 'Cifrado extremo SSL/TLS y redes privadas virtuales VPC.'
     }
   ];
-
-  const faqs = [
-    {
-      question: '¿Qué diferencia una arquitectura de medallones de un Data Warehouse tradicional?',
-      answer: 'Un Data Warehouse tradicional es rígido, costoso de escalar y requiere transformar los datos antes de guardarlos (schema-on-write). La arquitectura de medallones organiza los datos de forma progresiva en capas (Bronze: datos crudos, Silver: filtrados y limpios, Gold: agregados para analítica). Utiliza formatos de archivos abiertos altamente eficientes (como Apache Iceberg o Delta Lake), lo que permite separar el almacenamiento barato del cómputo que consultas, reduciendo costos de licencia y hardware.'
-    },
-    {
-      question: '¿Puedo combinar componentes on-premise (Apache) con servicios cloud (AWS/Azure)?',
-      answer: 'Sí. Diseñamos soluciones híbridas independientes. Por ejemplo, puedes procesar datos localmente con Apache Spark y orquestar con Airflow, pero almacenar los resultados históricos en nubes elásticas de bajo costo como AWS S3 o Azure Storage. Esto te permite tener soberanía sobre tus operaciones físicas diarias y resiliencia en la nube.'
-    },
-    {
-      question: '¿Qué gobernanza de datos aplican en los Data Lakehouses?',
-      answer: 'Aplicamos marcos de gobernanza independientes para control de accesos a nivel de filas o columnas, catalogado automático con diccionarios de datos, y enmascaramiento automático de información sensible (PII). Todo esto se implementa en pipelines automatizados de manera transparente.'
-    },
-    {
-      question: '¿Ofrecen soporte y optimización para los pipelines en producción?',
-      answer: 'Sí. Acompañamos el soporte técnico post-implementación de tus flujos e implementamos auditorías de optimización para reducir facturación cloud redundante y prevenir interrupciones en tus dashboards de análisis de negocio.'
-    }
-  ];
-
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <div className="animate-in fade-in duration-300">
-
+      
       {/* 1. HERO SECTION */}
       <section className="pt-28 pb-16 md:pt-36 md:pb-24 bg-[#FFFFFF] border-b border-neutral-900/10 overflow-hidden relative">
         <div className="absolute top-12 right-0 w-72 h-72 bg-dot-matrix-sm opacity-20 pointer-events-none -z-10" />
@@ -181,30 +156,38 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-
+            
             {/* LEFT: TEXT */}
             <div className="lg:col-span-7 space-y-6">
               <div className="inline-flex items-center gap-2 px-3 py-1 bg-neutral-50 border border-neutral-900/15 rounded-md">
                 <span className="w-2 h-2 rounded-sm bg-[#5B4FE5]"></span>
                 <span className="text-xs font-mono font-medium tracking-wide text-[#111111] uppercase">
-                  Infraestructura & Ingeniería de Datos
+                  {t.heroTag}
                 </span>
               </div>
 
               <h1 className="font-serif text-4xl sm:text-5xl lg:text-6.5xl text-[#111111] leading-tight tracking-tight">
-                Del dato disperso a la <span className="text-[#5B4FE5] italic font-serif">decisión</span> que tu negocio entiende.
+                {lang === 'en' ? (
+                  <>
+                    Orchestrate your analytical pipelines <span className="text-[#5B4FE5] italic font-serif">without disruption</span>.
+                  </>
+                ) : (
+                  <>
+                    Orquesta tus flujos analíticos <span className="text-[#5B4FE5] italic font-serif">sin disrupción</span>.
+                  </>
+                )}
               </h1>
 
               <p className="font-sans text-base text-[#6B7280] leading-relaxed">
-                Integramos, migramos, modelamos, almacenamos y explotamos tu información sobre AWS, Azure o Apache on-premise — libre de licencias y sin vendor lock-in.
+                {t.heroSubtitle}
               </p>
 
               <div className="pt-2 flex flex-wrap items-center gap-3">
                 <button
-                  onClick={onOpenContact}
+                  onClick={() => scrollToSection('diagnostico')}
                   className="px-6 py-3.5 bg-[#0A0A0A] hover:bg-[#5B4FE5] text-white font-sans font-bold text-xs uppercase tracking-wider rounded-md transition-all duration-200 shadow-md flex items-center gap-2 cursor-pointer group"
                 >
-                  <span>CONVERSEMOS</span>
+                  <span>{t.ctaDiagnosis}</span>
                   <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                 </button>
 
@@ -212,21 +195,21 @@ export const DatosView: React.FC<DatosViewProps> = ({
                   onClick={onOpenResources}
                   className="px-6 py-3.5 bg-transparent hover:bg-neutral-100 border border-neutral-900 text-[#111111] font-sans font-bold text-xs uppercase tracking-wider rounded-md transition-colors cursor-pointer"
                 >
-                  VER BLUEPRINTS DE ARQUITECTURA
+                  {t.ctaStack}
                 </button>
               </div>
             </div>
 
-            {/* RIGHT: ILLUSTRATION */}
+            {/* RIGHT: ILLUSTRATION GRAPHIC */}
             <div className="lg:col-span-5 flex flex-col items-center justify-center p-6 bg-neutral-50/80 rounded-xl border border-neutral-200/80 relative paper-cut-lg paper-cut-fold group transition-all duration-300 hover:border-[#5B4FE5]/40">
               <div className="absolute top-3 left-3 text-[10px] font-mono text-[#6B7280] uppercase tracking-widest flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#5B4FE5]"></span>
-                DATA PIPELINE SCHEMATIC
+                {t.capsuleIndependent}
               </div>
 
               <div className="py-6 flex items-center justify-center my-2">
                 <DotMatrixCanvas
-                  shape="lakehouse"
+                  shape="hourglass"
                   width={260}
                   height={260}
                   dotColor="#5B4FE5"
@@ -239,8 +222,8 @@ export const DatosView: React.FC<DatosViewProps> = ({
               <div className="w-full dotted-line py-2 my-2" />
 
               <div className="w-full flex items-center justify-between text-xs font-mono text-[#111111]">
-                <span className="font-semibold text-[#5B4FE5]">SIX DATA STACK 3.0</span>
-                <span className="text-[#6B7280]">Open Cloud Storage</span>
+                <span className="font-semibold text-[#5B4FE5]">DATA PIPELINE DYNAMICS</span>
+                <span className="text-[#6B7280]">Independent Stack</span>
               </div>
             </div>
 
@@ -248,24 +231,24 @@ export const DatosView: React.FC<DatosViewProps> = ({
         </div>
       </section>
 
-      {/* 2. DIAGNÓSTICO: ¿QUÉ NECESITA TU NEGOCIO HOY? */}
-      <section className="py-16 bg-neutral-50/70 border-b border-neutral-900/10">
+      {/* 2. DIAGNÓSTICO INTERACTIVO */}
+      <section id="diagnostico" className="py-20 bg-[#FFFFFF] border-b border-neutral-900/10 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="text-center max-w-2xl mx-auto mb-10">
-            <span className="text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-bold mb-1 block">
-              // DIAGNÓSTICO INTERACTIVO
+          
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-bold mb-2 block">
+              // {lang === 'en' ? 'INFRASTRUCTURE ADVICE' : 'ASESORÍA DE INFRAESTRUCTURA'}
             </span>
-            <h2 className="font-serif text-2xl sm:text-3xl text-[#111111] font-bold">
-              ¿Qué necesita tu negocio hoy?
+            <h2 className="font-serif text-3xl sm:text-4xl text-[#111111]">
+              {t.diagnosisTitle}
             </h2>
-            <p className="font-sans text-xs text-[#6B7280] mt-1">
-              Selecciona la situación actual de tus datos para identificar el camino y modelo de almacenamiento recomendado:
+            <p className="font-sans text-xs sm:text-sm text-[#6B7280] mt-2 leading-relaxed">
+              {t.diagnosisSubtitle}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-5xl mx-auto mb-8">
-
+            
             {/* OPTION 1 */}
             <div
               onClick={() => handleDiagnosisClick('crm')}
@@ -277,13 +260,13 @@ export const DatosView: React.FC<DatosViewProps> = ({
               <div>
                 <FileSpreadsheet className={`w-6 h-6 mb-3 ${selectedDiagnosis === 'crm' ? 'text-[#5B4FE5]' : 'text-neutral-400'}`} />
                 <h4 className="font-sans font-bold text-xs text-[#111111] uppercase tracking-wider mb-2">
-                  ¿No tienes base de datos?
+                  {lang === 'en' ? 'No database?' : '¿No tienes base de datos?'}
                 </h4>
                 <p className="text-[11px] text-[#6B7280] leading-relaxed">
-                  Usas principalmente hojas de cálculo locales de Excel para registrar clientes y ventas.
+                  {lang === 'en' ? 'You mainly rely on local Excel sheets to record leads and sales.' : 'Usas principalmente hojas de cálculo locales de Excel para registrar clientes y ventas.'}
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">Seleccionar →</span>
+              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">{lang === 'en' ? 'Select →' : 'Seleccionar →'}</span>
             </div>
 
             {/* OPTION 2 */}
@@ -297,13 +280,13 @@ export const DatosView: React.FC<DatosViewProps> = ({
               <div>
                 <Database className={`w-6 h-6 mb-3 ${selectedDiagnosis === 'warehouse' ? 'text-[#5B4FE5]' : 'text-neutral-400'}`} />
                 <h4 className="font-sans font-bold text-xs text-[#111111] uppercase tracking-wider mb-2">
-                  ¿Bases desordenadas?
+                  {lang === 'en' ? 'Messy databases?' : '¿Bases desordenadas?'}
                 </h4>
                 <p className="text-[11px] text-[#6B7280] leading-relaxed">
-                  Tienes datos en un volumen pequeño-mediano, pero están duplicados e inconexos.
+                  {lang === 'en' ? 'You have small-to-medium volumes, but tables are duplicate and disconnected.' : 'Tienes datos en un volumen pequeño-mediano, pero están duplicados e inconexos.'}
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">Seleccionar →</span>
+              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">{lang === 'en' ? 'Select →' : 'Seleccionar →'}</span>
             </div>
 
             {/* OPTION 3 */}
@@ -317,13 +300,13 @@ export const DatosView: React.FC<DatosViewProps> = ({
               <div>
                 <Layers className={`w-6 h-6 mb-3 ${selectedDiagnosis === 'lake' ? 'text-[#5B4FE5]' : 'text-neutral-400'}`} />
                 <h4 className="font-sans font-bold text-xs text-[#111111] uppercase tracking-wider mb-2">
-                  ¿Volumen y no estructurados?
+                  {lang === 'en' ? 'Volume & Unstructured?' : '¿Volumen y no estructurados?'}
                 </h4>
                 <p className="text-[11px] text-[#6B7280] leading-relaxed">
-                  Datos estructurados pero necesitas integrar múltiples fuentes raw variadas en gran escala.
+                  {lang === 'en' ? 'Tons of raw API logs and operational tables that need to stream.' : 'Datos estructurados pero necesitas integrar múltiples fuentes raw variadas en gran escala.'}
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">Seleccionar →</span>
+              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">{lang === 'en' ? 'Select →' : 'Seleccionar →'}</span>
             </div>
 
             {/* OPTION 4 */}
@@ -337,13 +320,13 @@ export const DatosView: React.FC<DatosViewProps> = ({
               <div>
                 <Network className={`w-6 h-6 mb-3 ${selectedDiagnosis === 'lakehouse' ? 'text-[#5B4FE5]' : 'text-neutral-400'}`} />
                 <h4 className="font-sans font-bold text-xs text-[#111111] uppercase tracking-wider mb-2">
-                  ¿Gobernanza + Volumen?
+                  {lang === 'en' ? 'Governance + Scale?' : '¿Gobernanza + Volumen?'}
                 </h4>
                 <p className="text-[11px] text-[#6B7280] leading-relaxed">
-                  Necesitas la flexibilidad de un gran volumen combinada con control de transacciones SQL.
+                  {lang === 'en' ? 'You need the scale of a Data Lake combined with strict SQL ACID transactional rules.' : 'Necesitas la flexibilidad de un gran volumen combinada con control de transacciones SQL.'}
                 </p>
               </div>
-              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">Seleccionar →</span>
+              <span className="text-[10px] font-mono text-[#5B4FE5] font-bold mt-4 block">{lang === 'en' ? 'Select →' : 'Seleccionar →'}</span>
             </div>
 
           </div>
@@ -353,20 +336,28 @@ export const DatosView: React.FC<DatosViewProps> = ({
             <div className="max-w-3xl mx-auto p-6 bg-white border border-neutral-300 rounded-lg animate-in fade-in slide-in-from-top-1 duration-200 flex flex-col sm:flex-row items-center justify-between gap-4">
               <div>
                 <h5 className="font-sans font-bold text-xs text-[#5B4FE5] uppercase tracking-wider mb-1">
-                  RECOMENDACIÓN TÉCNICA SIX DATA
+                  {t.diagRecomTitle}
                 </h5>
                 <p className="font-sans text-xs text-[#111111] leading-relaxed max-w-xl">
                   {selectedDiagnosis === 'crm' && (
-                    <><strong>Te conviene empezar por un CRM.</strong> Si tu equipo comercial sigue trabajando con planillas locales y correos sueltos, el primer paso es organizar tus procesos en un CRM centralizado en la nube para obtener trazabilidad inmediata.</>
+                    lang === 'en'
+                      ? <><strong>We recommend starting with a CRM.</strong> If your sales team operates with local sheets and scattered emails, the first step is centralizing sales contacts and notes in modern software to obtain immediate visibility.</>
+                      : <><strong>Te conviene empezar por un CRM.</strong> Si tu equipo comercial sigue trabajando con planillas locales y correos sueltos, el primer paso es organizar tus procesos en un CRM centralizado en la nube para obtener trazabilidad inmediata.</>
                   )}
                   {selectedDiagnosis === 'warehouse' && (
-                    <><strong>Te conviene un Data Warehouse.</strong> Ideal para datos estructurados de volumen pequeño o mediano. Recomendamos centralizar en un almacén de datos SQL listo para conectar a tableros de visualización de BI.</>
+                    lang === 'en'
+                      ? <><strong>We recommend a Data Warehouse.</strong> Perfect for structured tables in small-to-medium volumes. We suggest building a unifed SQL warehouse ready to connect directly to BI reporting lines.</>
+                      : <><strong>Te conviene un Data Warehouse.</strong> Ideal para datos estructurados de volumen pequeño o mediano. Recomendamos centralizar en un almacén de datos SQL listo para conectar a tableros de visualización de BI.</>
                   )}
                   {selectedDiagnosis === 'lake' && (
-                    <><strong>Te conviene un Data Lake.</strong> Si tienes múltiples fuentes crudas (APIs, logs, imágenes, bases operacionales) en gran volumen, necesitas un repositorio elástico en la nube para ingestar sin fricciones.</>
+                    lang === 'en'
+                      ? <><strong>We recommend a Data Lake.</strong> If you hold multiple raw sources (APIs, logs, custom files) at scale, you need a flexible cloud storage bucket to ingest resources without bottlenecks.</>
+                      : <><strong>Te conviene un Data Lake.</strong> Si tienes múltiples fuentes crudas (APIs, logs, imágenes, bases operacionales) en gran volumen, necesitas un repositorio elástico en la nube para ingestar sin fricciones.</>
                   )}
                   {selectedDiagnosis === 'lakehouse' && (
-                    <><strong>Te conviene un Data Lakehouse.</strong> Combina el bajo costo y escala de un Data Lake con las transacciones ACID y velocidad SQL de un Data Warehouse usando capas de medallones.</>
+                    lang === 'en'
+                      ? <><strong>We recommend a Data Lakehouse.</strong> Combines the low storage costs and raw flexibility of a Data Lake with the ACID transactions and SQL query speeds of a Data Warehouse.</>
+                      : <><strong>Te conviene un Data Lakehouse.</strong> Combina el bajo costo y escala de un Data Lake con las transacciones ACID y velocidad SQL de un Data Warehouse usando capas de medallones.</>
                   )}
                 </p>
               </div>
@@ -376,7 +367,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
                   onClick={() => onNavigate('/crm')}
                   className="px-4 py-2.5 bg-[#5B4FE5] hover:bg-[#4A3FD2] text-white text-xs font-sans font-bold uppercase tracking-wider rounded-md transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  Explorar CRM →
+                  {lang === 'en' ? 'Explore CRM →' : 'Explorar CRM →'}
                 </button>
               ) : (
                 <button
@@ -388,7 +379,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
                   }}
                   className="px-4 py-2.5 bg-[#0A0A0A] hover:bg-[#5B4FE5] text-white text-xs font-sans font-bold uppercase tracking-wider rounded-md transition-colors whitespace-nowrap cursor-pointer"
                 >
-                  Ver Comparativa ↓
+                  {lang === 'en' ? 'View Comparison ↓' : 'Ver Comparativa ↓'}
                 </button>
               )}
             </div>
@@ -404,19 +395,31 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
             <div className="lg:col-span-6 space-y-6">
               <div className="inline-flex items-center gap-2 text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-semibold">
-                <span>// PROPUESTA TÉCNICA</span>
+                <span>// {lang === 'en' ? 'TECHNICAL ARCHITECTURE' : 'PROPUESTA TÉCNICA'}</span>
               </div>
 
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#111111] leading-snug">
-                Soluciones en la nube y on-premise, <span className="text-[#5B4FE5] font-serif italic">libres de ataduras</span> propietarias.
+                {lang === 'en' ? (
+                  <>
+                    Cloud and on-premise solutions, <span className="text-[#5B4FE5] font-serif italic">free of locks</span>.
+                  </>
+                ) : (
+                  <>
+                    Soluciones en la nube y on-premise, <span className="text-[#5B4FE5] font-serif italic">libres de ataduras</span> propietarias.
+                  </>
+                )}
               </h2>
 
               <p className="font-sans text-base text-[#6B7280] leading-relaxed">
-                Nuestra propuesta técnica en Soluciones de Datos se fundamenta en la rentabilidad y la flexibilidad. Diseñamos modelos elásticos e independientes para que no tengas dependencias obligatorias de licencias corporativas excesivas.
+                {lang === 'en'
+                  ? 'Our data architecture approach centers on profitability and flexibility. We design elastic, open frameworks so you do not suffer from mandatory corporate software licensing bills.'
+                  : 'Nuestra propuesta técnica en Soluciones de Datos se fundamenta en la rentabilidad y la flexibilidad. Diseñamos modelos elásticos e independientes para que no tengas dependencias obligatorias de licencias corporativas excesivas.'}
               </p>
 
               <p className="font-sans text-base text-[#6B7280] leading-relaxed">
-                Modelamos bases de datos relacionales estables y automatizamos flujos de ETL para simplificar la toma de decisiones basada en reportes limpios, auditados y consistentes.
+                {lang === 'en'
+                  ? 'We model structured SQL engines and schedule ETL automation pipelines to simplify decisions based on audited, cleaned, and consistent metrics.'
+                  : 'Modelamos bases de datos relacionales estables y automatizamos flujos de ETL para simplificar la toma de decisiones basada en reportes limpios, auditados y consistentes.'}
               </p>
             </div>
 
@@ -450,7 +453,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
                     </div>
 
                     <div className="mt-3 pt-3 border-t border-neutral-100 flex items-center justify-between text-[10px] font-mono text-neutral-400">
-                      <span>Data Architecture</span>
+                      <span>{lang === 'en' ? 'Data Engineering' : 'Arquitectura de Datos'}</span>
                       <span>{stat.meta}</span>
                     </div>
                   </div>
@@ -468,13 +471,13 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-bold mb-1 block">
-              // NUESTRA METODOLOGÍA
+              // {t.methodTag}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#111111] font-bold">
-              Cómo Trabajamos
+              {t.methodTitle}
             </h2>
             <p className="font-sans text-xs text-[#6B7280] mt-1">
-              Un servicio end-to-end de datos enfocado en el lenguaje de tu negocio.
+              {lang === 'en' ? 'End-to-end data services focusing on your business language.' : 'Un servicio end-to-end de datos enfocado en el lenguaje de tu negocio.'}
             </p>
           </div>
 
@@ -508,14 +511,22 @@ export const DatosView: React.FC<DatosViewProps> = ({
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 pb-6 border-b border-neutral-200">
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-semibold mb-2">
-                <span>// CAPACIDADES OPERATIVAS</span>
+                <span>// {t.capabilitiesTag}</span>
               </div>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#111111]">
-                Nuestros Servicios de <span className="text-[#5B4FE5] font-serif italic">Datos</span>
+                {lang === 'en' ? (
+                  <>
+                    Our <span className="text-[#5B4FE5] font-serif italic">Data</span> Services
+                  </>
+                ) : (
+                  <>
+                    Nuestros Servicios de <span className="text-[#5B4FE5] font-serif italic">Datos</span>
+                  </>
+                )}
               </h2>
             </div>
             <p className="mt-4 md:mt-0 font-sans text-xs text-[#6B7280] max-w-md leading-relaxed">
-              Soluciones estructuradas diseñadas para organizar, consolidar y optimizar el almacenamiento analítico de tu organización.
+              {t.capabilitiesSubtitle}
             </p>
           </div>
 
@@ -533,7 +544,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
                     </div>
                     <div className="flex flex-col">
                       <span className="text-[10px] font-mono text-[#5B4FE5] uppercase font-bold tracking-wider">
-                        CATEGORÍA 0{idx + 1}
+                        {lang === 'en' ? `CATEGORY 0${idx + 1}` : `CATEGORÍA 0${idx + 1}`}
                       </span>
                       <h3 className="font-sans font-bold text-base text-[#111111] group-hover:text-[#5B4FE5] transition-colors">
                         {service.title}
@@ -558,7 +569,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
                 <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
                   <span className="text-[11px] font-mono text-[#111111] font-semibold group-hover:text-[#5B4FE5]">
-                    Especificaciones Técnicas →
+                    {lang === 'en' ? 'Technical specifications →' : 'Especificaciones Técnicas →'}
                   </span>
                   <div className="w-9 h-9 rounded-full border border-neutral-900/20 group-hover:border-[#5B4FE5] group-hover:bg-[#5B4FE5] group-hover:text-white text-[#111111] flex items-center justify-center transition-all duration-200">
                     <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
@@ -577,18 +588,17 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
           <div className="text-center max-w-2xl mx-auto mb-16">
             <span className="text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-bold mb-2 block">
-              // ECOCOMPATIBILIDAD
+              // {lang === 'en' ? 'INTEGRATIONS' : 'ECOCOMPATIBILIDAD'}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#111111]">
-              Integraciones Tecnológicas
+              {lang === 'en' ? 'Technology Integrations' : 'Integraciones Tecnológicas'}
             </h2>
             <p className="font-sans text-xs text-[#6B7280] mt-1">
-              Organizadas según tu entorno de infraestructura y herramientas transversales de Business Intelligence:
+              {lang === 'en' ? 'Organized by environment ecosystem and transversal Business Intelligence layouts:' : 'Organizadas según tu entorno de infraestructura y herramientas transversales de Business Intelligence:'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-
             {/* AWS */}
             <div className="p-6 bg-white border border-neutral-200 rounded-lg flex flex-col justify-between hover:border-[#5B4FE5] transition-colors paper-cut">
               <div>
@@ -644,7 +654,7 @@ export const DatosView: React.FC<DatosViewProps> = ({
             <div className="p-6 bg-white border border-neutral-200 rounded-lg flex flex-col justify-between hover:border-[#5B4FE5] transition-colors paper-cut">
               <div>
                 <div className="text-xs font-mono font-bold text-[#5B4FE5] uppercase tracking-widest mb-3 border-b border-neutral-100 pb-2">
-                  Visualización & BI
+                  {lang === 'en' ? 'BI & Visualization' : 'Visualización & BI'}
                 </div>
                 <ul className="space-y-2 text-xs font-sans text-[#111111]">
                   {['Power BI', 'Tableau', 'Metabase'].map((tech, i) => (
@@ -656,7 +666,6 @@ export const DatosView: React.FC<DatosViewProps> = ({
                 </ul>
               </div>
             </div>
-
           </div>
 
         </div>
@@ -668,13 +677,15 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
           <div className="text-center max-w-3xl mx-auto mb-12">
             <span className="text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-bold mb-2 block">
-              // COMPARATIVO DE DEPLOYMENT
+              // {lang === 'en' ? 'DEPLOYMENT GRID' : 'COMPARATIVO DE DEPLOYMENT'}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#111111]">
-              On-Premise vs. Nube
+              On-Premise vs. {lang === 'en' ? 'Cloud' : 'Nube'}
             </h2>
             <p className="font-sans text-xs sm:text-sm text-[#111111] mt-3 font-semibold max-w-xl mx-auto leading-relaxed italic">
-              "No se trata de cuál es mejor, sino de cuál te conviene según tu punto de partida: si ya invertiste en infraestructura propia, on-premise te rinde; si no, la nube te conviene."
+              {lang === 'en'
+                ? '"It is not about which one is better, but which one fits your starting line: if you already invested in local servers, keep it on-premise; if not, go cloud."'
+                : '"No se trata de cuál es mejor, sino de cuál te conviene según tu punto de partida: si ya invertiste en infraestructura propia, on-premise te rinde; si no, la nube te conviene."'}
             </p>
           </div>
 
@@ -683,19 +694,19 @@ export const DatosView: React.FC<DatosViewProps> = ({
               <thead>
                 <tr className="border-b border-neutral-200 bg-neutral-50/80">
                   <th className="py-4 px-6 text-xs font-mono text-[#6B7280] uppercase tracking-wider w-1/4">
-                    Criterio
+                    {lang === 'en' ? 'Criterion' : 'Criterio'}
                   </th>
                   <th className={`py-4 px-6 text-xs font-mono uppercase tracking-wider w-3/8 border-l border-neutral-200 ${highlightedCol === 'on-premise'
                       ? 'text-[#5B4FE5] font-bold border-t-2 border-t-[#5B4FE5] bg-[#5B4FE5]/5'
                       : 'text-[#111111]'
                     }`}>
-                    On-Premise (Apache, libre licencia)
+                    On-Premise (Apache, {lang === 'en' ? 'free license' : 'libre licencia'})
                   </th>
                   <th className={`py-4 px-6 text-xs font-mono uppercase tracking-wider w-3/8 border-l border-neutral-200 ${highlightedCol === 'nube'
                       ? 'text-[#5B4FE5] font-bold border-t-2 border-t-[#5B4FE5] bg-[#5B4FE5]/5'
                       : 'text-[#111111]'
                     }`}>
-                    Nube Pública (AWS / Azure)
+                    {lang === 'en' ? 'Public Cloud (AWS / Azure)' : 'Nube Pública (AWS / Azure)'}
                   </th>
                 </tr>
               </thead>
@@ -728,15 +739,23 @@ export const DatosView: React.FC<DatosViewProps> = ({
 
           <div className="text-center mb-12">
             <span className="text-xs font-mono text-[#5B4FE5] uppercase tracking-wider font-bold mb-2 block">
-              // PREGUNTAS TÉCNICAS
+              // {t.faqTag}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl text-[#111111]">
-              Resuelve tus dudas sobre <span className="text-[#5B4FE5] font-serif italic">Soluciones de Datos</span>
+              {lang === 'en' ? (
+                <>
+                  Resolve your questions about <span className="text-[#5B4FE5] font-serif italic">Data Solutions</span>
+                </>
+              ) : (
+                <>
+                  Resuelve tus dudas sobre <span className="text-[#5B4FE5] font-serif italic">Soluciones de Datos</span>
+                </>
+              )}
             </h2>
           </div>
 
           <div className="space-y-3">
-            {faqs.map((faq, i) => {
+            {t.faqItems.map((faq, i) => {
               const isOpen = activeFaq === i;
 
               return (
