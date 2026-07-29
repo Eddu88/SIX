@@ -1,6 +1,5 @@
 import React from 'react';
-import { REGIONS_DATA } from '../data/viData';
-import { Mail, Phone, MapPin, Linkedin, Instagram, Facebook, Youtube } from 'lucide-react';
+import { Mail, Phone, Linkedin, Instagram, Facebook, Youtube } from 'lucide-react';
 
 interface FooterProps {
   onNavigate?: (to: string) => void;
@@ -50,7 +49,7 @@ export const Footer: React.FC<FooterProps> = ({
             </div>
 
             <p className="font-sans text-xs text-neutral-400 leading-relaxed">
-              Servicios completos en arquitectura, ingeniería de datos, análisis de dashboards e integración de CRM modernos en la nube.
+              Somos una <strong className="text-white">empresa emergente</strong> dedicada a brindar servicios integrales en arquitectura, ingeniería de datos, análisis de dashboards e integración de CRM modernos en la nube.
             </p>
 
             <div className="pt-2 space-y-1.5 font-mono text-[10px] text-neutral-400">
@@ -129,7 +128,7 @@ export const Footer: React.FC<FooterProps> = ({
           {/* COLUMN 3: RECURSOS */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
-              Empresa & Recursos
+              Recursos
             </h4>
             <ul className="space-y-2 text-xs font-sans text-neutral-400">
               <li>
@@ -174,57 +173,53 @@ export const Footer: React.FC<FooterProps> = ({
             </ul>
           </div>
 
-          {/* COLUMN 4: REGIONES & BANDERAS */}
+          {/* COLUMN 4: PRESENCIA REGIONAL */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
               Presencia Regional
             </h4>
-            <ul className="space-y-2 text-xs font-sans text-neutral-400">
-              {REGIONS_DATA.map((reg, idx) => (
-                <li key={idx} className="flex items-center justify-between text-xs">
-                  <span className="flex items-center gap-1.5">
-                    <span>{reg.flag}</span>
-                    <span className="text-white font-medium">{reg.country}</span>
-                    <span className="text-[10px] text-neutral-400">({reg.city})</span>
-                  </span>
-
-                  {reg.isLaunchPartner && (
-                    <span className="text-[9px] font-mono text-[#5B4FE5] border border-[#5B4FE5] px-1.5 py-0.2 rounded font-bold">
-                      {reg.badgeText}
-                    </span>
-                  )}
-                </li>
-              ))}
+            <ul className="space-y-2.5 text-xs font-sans text-neutral-400">
+              <li className="flex items-center gap-1.5 justify-between">
+                <span className="flex items-center gap-1.5">
+                  <span>🇵🇪</span>
+                  <span className="text-white font-medium">Perú</span>
+                  <span className="text-[10px] text-neutral-400">(Lima)</span>
+                </span>
+                <span className="text-[9px] font-mono text-[#5B4FE5] border border-[#5B4FE5] px-1.5 py-0.2 rounded font-bold">
+                  SEDE PRINCIPAL
+                </span>
+              </li>
+              <li className="flex items-center gap-1.5">
+                <span>🇻🇪</span>
+                <span className="text-white font-medium">Venezuela</span>
+              </li>
             </ul>
           </div>
 
-          {/* COLUMN 5: CONTACTO & HORARIOS */}
+          {/* COLUMN 5: CONTACTO & SOPORTE */}
           <div className="space-y-3">
             <h4 className="font-sans font-bold text-xs uppercase tracking-wider text-white border-b border-neutral-800 pb-2">
               Contacto & Soporte
             </h4>
 
-            <div className="space-y-2 text-xs font-sans text-neutral-400">
-              <div className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#5B4FE5] shrink-0 mt-0.5" />
-                <span>Av. Víctor Andrés Belaúnde 147, San Isidro, Lima - Perú</span>
+            <div className="space-y-3 text-xs font-sans text-neutral-400">
+              <div className="space-y-1">
+                <div className="font-semibold text-white uppercase text-[9px] tracking-wider">Horario de Atención</div>
+                <div className="text-[10px] font-mono leading-normal">Disponible las 24 horas, los 7 días de la semana</div>
               </div>
 
               <div className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#5B4FE5] shrink-0" />
-                <a href="mailto:contacto@six-data.cloud" className="hover:text-white transition-colors">
-                  contacto@six-data.cloud
+                <a href="mailto:contacto@emeal.six-data.com" className="hover:text-white transition-colors">
+                  contacto@emeal.six-data.com
                 </a>
               </div>
 
               <div className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#5B4FE5] shrink-0" />
-                <span>+51 (1) 700-8890</span>
-              </div>
-
-              <div className="pt-2 border-t border-neutral-800/80 text-[11px] font-mono text-neutral-400 space-y-1">
-                <div>• Horario de Atención: L-V 09:00 - 18:00</div>
-                <div>• Canal de Soporte: <span className="text-[#5B4FE5] font-bold">Respuesta Rápida</span></div>
+                <a href="https://wa.me/51947196222" target="_blank" rel="noreferrer" className="hover:text-white transition-colors">
+                  +51 947 196 222
+                </a>
               </div>
             </div>
           </div>
@@ -274,15 +269,6 @@ export const Footer: React.FC<FooterProps> = ({
               aria-label="YouTube Six"
             >
               <Youtube className="w-3.5 h-3.5" />
-            </a>
-            <a
-              href="https://medium.com"
-              target="_blank"
-              rel="noreferrer"
-              className="w-8 h-8 rounded-full border border-neutral-800 hover:border-[#5B4FE5] hover:text-[#5B4FE5] flex items-center justify-center transition-colors font-serif font-bold text-xs"
-              aria-label="Medium Blog Six"
-            >
-              M
             </a>
           </div>
         </div>
